@@ -1,5 +1,6 @@
 package com.minhyuk.coding_sparta_portfolio.service;
 
+import com.minhyuk.coding_sparta_portfolio.dto.UserAccountDto.UserAccountFindAllRes;
 import com.minhyuk.coding_sparta_portfolio.repository.UserAccountRepository;
 import com.minhyuk.coding_sparta_portfolio.dto.UserAccountDto.UserAccountCreateReq;
 import com.minhyuk.coding_sparta_portfolio.domain.UserAccount;
@@ -10,6 +11,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.apache.commons.lang3.ObjectUtils;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 @Transactional
 @RequiredArgsConstructor
@@ -17,11 +21,11 @@ public class UserAccountService {
 
     private final PasswordEncoder passwordEncoder;
 
-    private final UserAccountRepository accountRepository;
+    private final UserAccountRepository userAccountRepository;
 
     public void create(UserAccountCreateReq req) {
 
-        UserAccount oldAdmin = this.accountRepository.findOneByEmail(req.getEmail());
+        UserAccount oldAdmin = this.userAccountRepository.findOneByEmail(req.getEmail());
         if(ObjectUtils.isNotEmpty(oldAdmin)) {
             throw new IllegalArgumentException("User duplicated");
         }
@@ -35,6 +39,20 @@ public class UserAccountService {
                                 .status(UserStatus.NEW)
                                 .build();
 
-        this.accountRepository.save(entity);
+        this.userAccountRepository.save(entity);
+    }
+
+    public List<UserAccountFindAllRes> findAll() {
+        List<UserAccount> entities = this.userAccountRepository.findAll();
+
+        List<UserAccountFindAllRes> resList = new ArrayList<>();
+        entities.forEach(i -> {
+            UserAccountFindAllRes res = UserAccountFindAllRes.builder()
+                                    .user(i)
+                                    .build();
+            resList.add(res);
+        });
+
+        return resList;
     }
 }
