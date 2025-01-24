@@ -1,8 +1,10 @@
 package com.minhyuk.coding_sparta_portfolio.service;
 
+import com.minhyuk.coding_sparta_portfolio.dto.UserAccountDto;
 import com.minhyuk.coding_sparta_portfolio.dto.UserAccountDto.UserAccountFindAllRes;
 import com.minhyuk.coding_sparta_portfolio.repository.UserAccountRepository;
 import com.minhyuk.coding_sparta_portfolio.dto.UserAccountDto.UserAccountCreateReq;
+import com.minhyuk.coding_sparta_portfolio.dto.UserAccountDto.UserAccountUpdateReq;
 import com.minhyuk.coding_sparta_portfolio.domain.UserAccount;
 import com.minhyuk.coding_sparta_portfolio.enums.UserStatus;
 import lombok.RequiredArgsConstructor;
@@ -25,8 +27,8 @@ public class UserAccountService {
 
     public void create(UserAccountCreateReq req) {
 
-        UserAccount oldAdmin = this.userAccountRepository.findOneByEmail(req.getEmail());
-        if(ObjectUtils.isNotEmpty(oldAdmin)) {
+        UserAccount oldUser = this.userAccountRepository.findOneByEmail(req.getEmail());
+        if(ObjectUtils.isNotEmpty(oldUser)) {
             throw new IllegalArgumentException("User duplicated");
         }
 
@@ -43,6 +45,7 @@ public class UserAccountService {
     }
 
     public List<UserAccountFindAllRes> findAll() {
+
         List<UserAccount> entities = this.userAccountRepository.findAll();
 
         List<UserAccountFindAllRes> resList = new ArrayList<>();
@@ -54,5 +57,21 @@ public class UserAccountService {
         });
 
         return resList;
+    }
+
+    public void update(Long userId, UserAccountUpdateReq req){
+
+        UserAccount entity = this.userAccountRepository.findById(userId).orElseThrow(
+            () -> new IllegalArgumentException("Admin not found")
+        );
+
+        if(ObjectUtils.isNotEmpty(
+                this.userAccountRepository.findOneByEmail(req.getEmail()))) {
+            throw new IllegalArgumentException("User Email duplicated");
+        }
+
+        String encodedPassword = passwordEncoder.encode(req.getPassword());
+
+        entity.update(req, encodedPassword);
     }
 }

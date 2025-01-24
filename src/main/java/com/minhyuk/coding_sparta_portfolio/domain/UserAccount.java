@@ -1,5 +1,6 @@
 package com.minhyuk.coding_sparta_portfolio.domain;
 
+import com.minhyuk.coding_sparta_portfolio.dto.UserAccountDto.UserAccountUpdateReq;
 import com.minhyuk.coding_sparta_portfolio.enums.UserStatus;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -54,4 +55,12 @@ public class UserAccount {
         this.name = name;
         this.status = status;
 	}
+
+    public void update(UserAccountUpdateReq req, String encodedPassword) {
+        if(ObjectUtils.isNotEmpty(req)) {
+            this.name = req.getName();
+            this.email = req.getEmail();
+            this.password = encodedPassword;
+        }
+    }
 }

@@ -23,6 +23,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.minhyuk.coding_sparta_portfolio.api.UserAccountApi;
 import com.minhyuk.coding_sparta_portfolio.dto.UserAccountDto.UserAccountCreateReq;
 import com.minhyuk.coding_sparta_portfolio.service.UserAccountService;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -39,7 +41,6 @@ class UserAccountApiTestCreate {
 
     @BeforeEach
     void setUp() {
-        // ✅ `Mockito.when(...).thenReturn(null);` -> `doNothing()`으로 변경
         Mockito.doNothing().when(userAccountService).create(Mockito.any());
     }
 
@@ -54,7 +55,6 @@ class UserAccountApiTestCreate {
     @WithMockUser(username = "guest", roles = "GUEST")
     void testCreateUser() throws Exception {
         String jsonRequest = "{\"email\":\"email1@example.com\",\"password\":\"password\",\"name\":\"username\"}";
-
         mockMvc.perform(post("/user/signup")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(jsonRequest))
@@ -65,24 +65,21 @@ class UserAccountApiTestCreate {
     @WithMockUser(username = "guest", roles = "GUEST")
     void testCreateUserWithInvalidEmail() throws Exception {
         String jsonRequest = "{\"email\":\"invalid-email\",\"password\":\"password\",\"name\":\"username\"}";
-
         mockMvc.perform(post("/user/signup")
             .contentType(MediaType.APPLICATION_JSON)
             .content(jsonRequest))
                 .andExpect(jsonPath("$.message").value("Invalid email format"));
     }
 
-       @Test
-       @WithMockUser(username = "guest", roles = "GUEST")
-       void testCreateUserWithEmptyFields() throws Exception {
-           String jsonRequest = "{\"email\":\"\",\"password\":\"password\",\"name\":\"username\"}";
-
-           mockMvc.perform(post("/user/signup")
-                   .contentType(MediaType.APPLICATION_JSON)
-                   .content(jsonRequest))
-                   .andExpect(jsonPath("$.message").value("Email required"));
+    @Test
+    @WithMockUser(username = "guest", roles = "GUEST")
+    void testCreateUserWithEmptyFields() throws Exception {
+    String jsonRequest = "{\"email\":\"\",\"password\":\"password\",\"name\":\"username\"}";
+        mockMvc.perform(post("/user/signup")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(jsonRequest))
+            .andExpect(jsonPath("$.message").value("Email required"));
        }
-
 }
 
 

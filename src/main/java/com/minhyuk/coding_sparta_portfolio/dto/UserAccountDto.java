@@ -15,6 +15,7 @@ public class UserAccountDto {
     @Data
     @NoArgsConstructor(access = AccessLevel.PUBLIC)
     public static class UserAccountCreateReq {
+
         @NotBlank(message = "Email required")
         @Email(message = "Invalid email format")
         protected String email;
@@ -29,6 +30,7 @@ public class UserAccountDto {
     @Data
    	@NoArgsConstructor(access = AccessLevel.PROTECTED)
    	public static class UserAccountFindAllRes {
+
    		protected Long id;
         protected String email;
    		protected String name;
@@ -42,5 +44,15 @@ public class UserAccountDto {
                }
    		}
    	}
+
+    @Data
+    @NoArgsConstructor(access = AccessLevel.PUBLIC)
+    public static class UserAccountUpdateReq {
+
+        @Email(message = "Invalid email format")
+        protected String email;
+        protected String password;
+        protected String name;
+    }
 
 }
