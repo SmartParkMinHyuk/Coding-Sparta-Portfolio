@@ -59,7 +59,7 @@ public class UserAccountService {
 
     public void update(Long userId, UserAccountUpdateReq req){
         UserAccount entity = this.userAccountRepository.findById(userId).orElseThrow(
-            () -> new IllegalArgumentException("Admin not found")
+            () -> new IllegalArgumentException("User not found")
         );
 
         if(ObjectUtils.isNotEmpty(
@@ -74,7 +74,7 @@ public class UserAccountService {
 
     public void delete(Long userId) {
         UserAccount entity = this.userAccountRepository.findById(userId).orElseThrow(
-             () -> new IllegalArgumentException("Admin not found")
+             () -> new IllegalArgumentException("User not found")
          );
 
         this.userAccountRepository.delete(entity);

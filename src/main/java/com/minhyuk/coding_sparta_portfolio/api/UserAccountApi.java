@@ -53,7 +53,7 @@ public class UserAccountApi {
     @DeleteMapping("user/{id}")
     @ResponseStatus(HttpStatus.OK)
     @Operation(summary = "user 삭제")
-    public void delete(@PathVariable(name = "id") Long adminId) {
-        this.userAccountService.delete(adminId);
+    public void delete(@PathVariable(name = "id") Long userId) {
+        this.userAccountService.delete(userId);
     }
 }

@@ -15,7 +15,7 @@ import java.util.Date;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(name = "admin_account")
+@Table(name = "user_account")
 public class UserAccount {
 
     @Id
