@@ -26,7 +26,6 @@ public class UserAccountService {
     private final UserAccountRepository userAccountRepository;
 
     public void create(UserAccountCreateReq req) {
-
         UserAccount oldUser = this.userAccountRepository.findOneByEmail(req.getEmail());
         if(ObjectUtils.isNotEmpty(oldUser)) {
             throw new IllegalArgumentException("User duplicated");
@@ -45,7 +44,6 @@ public class UserAccountService {
     }
 
     public List<UserAccountFindAllRes> findAll() {
-
         List<UserAccount> entities = this.userAccountRepository.findAll();
 
         List<UserAccountFindAllRes> resList = new ArrayList<>();
@@ -60,7 +58,6 @@ public class UserAccountService {
     }
 
     public void update(Long userId, UserAccountUpdateReq req){
-
         UserAccount entity = this.userAccountRepository.findById(userId).orElseThrow(
             () -> new IllegalArgumentException("Admin not found")
         );
@@ -74,4 +71,12 @@ public class UserAccountService {
 
         entity.update(req, encodedPassword);
     }
+
+    public void delete(Long userId) {
+        UserAccount entity = this.userAccountRepository.findById(userId).orElseThrow(
+             () -> new IllegalArgumentException("Admin not found")
+         );
+
+        this.userAccountRepository.delete(entity);
+     }
 }
